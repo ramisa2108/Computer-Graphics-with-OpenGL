@@ -8,5 +8,3 @@ if [ $? -eq 0 ]; then
 fi
 
 exit 1
-
-

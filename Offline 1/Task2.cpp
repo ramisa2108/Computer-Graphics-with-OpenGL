@@ -36,29 +36,35 @@ void drawAxes()
 {
 	if(drawaxes==1)
 	{
-		glColor3f(1.0, 1.0, 1.0);
 		glBegin(GL_LINES);{
+
+            // x axis : red
+            glColor3f(1.0, 0.0, 0.0);
 			glVertex3f( 100,0,0);
 			glVertex3f(-100,0,0);
 
+            // y axis : green
+            glColor3f(0.0, 1.0, 0.0);
 			glVertex3f(0,-100,0);
 			glVertex3f(0, 100,0);
 
+            // z axis : blue
+            glColor3f(0.0, 0.0, 1.0);
 			glVertex3f(0,0, 100);
 			glVertex3f(0,0,-100);
-		}glEnd();
+		
+        }glEnd();
 	}
 }
 
 
 void drawGrid()
 {
-	int i;
 	if(drawgrid==1)
 	{
 		glColor3f(0.6, 0.6, 0.6);	//grey
 		glBegin(GL_LINES);{
-			for(i=-20;i<=20;i++){
+			for(int i=-20;i<=20;i++){
 
 
 				//lines parallel to Y-axis
@@ -76,23 +82,27 @@ void drawGrid()
 
 void drawCyllinder(double radius, double height, int segments)
 {
-    int i;
-    struct point points[100];
-    double shade;
+	//  parameters:
+	//		- segments: number of rectangles that makes up the surface of the cyllinder 
 
-    //generate points
-    for(i=0;i<=segments;i++)
+    struct point points[100];
+    
+    // generate points
+    for(int i=0;i<=segments;i++)
     {
         points[i].x=radius*cos(((double)i/(double)segments)*2*pi);
         points[i].y=radius*sin(((double)i/(double)segments)*2*pi);
     }
 
-    //draw quads using generated points
-    for(i=0;i<segments;i++)
+    // draw quads using generated points
+    for(int i=0;i<segments;i++)
     {
         // create shading effect
-        if(i<segments/2)shade=2*(double)i/(double)segments;
-        else shade=2*(1.0-(double)i/(double)segments);
+		double shade;
+        if(i<segments/2)
+			shade=2*(double)i/(double)segments;
+        else 
+			shade=2*(1.0-(double)i/(double)segments);
         glColor3f(shade, 0, 0);
 
         glBegin(GL_QUADS);
@@ -108,7 +118,7 @@ void drawCyllinder(double radius, double height, int segments)
 
 void drawSS()
 {
-    // translate to position
+    // translate to wheel position
     glTranslatef(wheel_center.x, wheel_center.y, wheel_center.z);
 
     // rotate to proper angles about x, y and z axis
@@ -125,6 +135,8 @@ void drawSS()
 
     // draw the wheel axes
     glColor3f(0.7, 0, 0);
+
+	// horizontal axis
     glPushMatrix();
     {
 
@@ -138,9 +150,9 @@ void drawSS()
     }
     glPopMatrix();
 
-    glPushMatrix();
+    // vertical axis
+	glPushMatrix();
     {
-
         glBegin(GL_QUADS);{
             glVertex3f( 0, wheel_radius, 2.5);
             glVertex3f( 0, wheel_radius, -2.5);
@@ -149,6 +161,7 @@ void drawSS()
         }glEnd();
     }
     glPopMatrix();
+
 }
 
 void keyboardListener(unsigned char key, int x,int y){
@@ -157,37 +170,36 @@ void keyboardListener(unsigned char key, int x,int y){
 
 	switch(key){
 
-		case '1':
+		case '1':	// show / hide grid
             drawgrid=1-drawgrid;
-
             break;
 
-        case 'w':
+        case 'w':	// move forward
 
             forward_angle += 30;
             if(forward_angle >= 360.0) forward_angle -= 360.0;
 
             wheel_center.x -= wheel_radius * pi / 6.0  * cos(rotation_angle * pi / 180);
             wheel_center.y -= wheel_radius * pi / 6.0  * sin(rotation_angle * pi / 180);
-
             break;
 
-        case 's':
+        case 's':	// move backward
+
             forward_angle -= 30;
             if(forward_angle < 0.0) forward_angle += 360.0;
 
             wheel_center.x += wheel_radius * pi / 6.0 * cos(rotation_angle * pi / 180);
             wheel_center.y += wheel_radius * pi / 6.0 * sin(rotation_angle * pi / 180);
-
-
             break;
 
-        case 'a':
+        case 'a':	// rotate left
+
             rotation_angle += A * 180 / pi;
             if(rotation_angle < 0.0) rotation_angle += 360.0;
             break;
 
-        case 'd':
+        case 'd':	// rotate right
+
             rotation_angle -= A * 180 / pi;
             if(rotation_angle >= 360.0) rotation_angle -= 360.0;
             break;
@@ -198,19 +210,20 @@ void keyboardListener(unsigned char key, int x,int y){
 }
 
 void specialKeyListener(int key, int x,int y){
+
 	switch(key){
 
-		case GLUT_KEY_DOWN:		//down arrow key
+		case GLUT_KEY_DOWN:		// move down
 			cameraHeight -= 3.0;
 			break;
-		case GLUT_KEY_UP:		// up arrow key
+		case GLUT_KEY_UP:		// move up
 			cameraHeight += 3.0;
 			break;
 
-		case GLUT_KEY_RIGHT:
+		case GLUT_KEY_RIGHT:	// rotate right
 			cameraAngle += 0.03;
 			break;
-		case GLUT_KEY_LEFT:
+		case GLUT_KEY_LEFT:		// rotate left
 			cameraAngle -= 0.03;
 			break;
 
@@ -231,20 +244,21 @@ void specialKeyListener(int key, int x,int y){
 	}
 }
 
-void mouseListener(int button, int state, int x, int y){	//x, y is the x-y of the screen (2D)
+void mouseListener(int button, int state, int x, int y){
+	// x, y is the x-y of the screen (2D)
 	switch(button){
 		case GLUT_LEFT_BUTTON:
-			if(state == GLUT_DOWN){		// 2 times?? in ONE click? -- solution is checking DOWN or UP
+
+			// show or hide axes
+			if(state == GLUT_DOWN){
 				drawaxes=1-drawaxes;
 			}
 			break;
 
 		case GLUT_RIGHT_BUTTON:
-			//........
 			break;
 
 		case GLUT_MIDDLE_BUTTON:
-			//........
 			break;
 
 		default:
@@ -268,26 +282,20 @@ void display(){
 	//initialize the matrix
 	glLoadIdentity();
 
-	//now give three info
-	//1. where is the camera (viewer)?
-	//2. where is the camera looking?
-	//3. Which direction is the camera's UP direction?
-
-    gluLookAt(200*cos(cameraAngle), 200*sin(cameraAngle), cameraHeight,		0,0,0,		0,0,1);
+	//  gluLookAt parameters:
+	//      - where is the camera (viewer)?
+	//      - where is the camera looking?
+	//      - which direction is the camera's UP direction?
+    gluLookAt(200*cos(cameraAngle), 200*sin(cameraAngle), cameraHeight, 0,0,0, 0,0,1);
 
 	//again select MODEL-VIEW
 	glMatrixMode(GL_MODELVIEW);
 
 
-	/****************************
-	/ Add your objects from here
-	****************************/
-	//add objects
-
-	drawAxes();
+	//add objects to draw
 	drawGrid();
-
-    drawSS();
+    drawAxes();
+	drawSS();
 
 	//ADD this line in the end --- if you use double buffer (i.e. GL_DOUBLE)
 	glutSwapBuffers();
@@ -296,7 +304,6 @@ void display(){
 
 void animate(){
 	angle+=0.05;
-	//codes for any changes in Models, Camera
 	glutPostRedisplay();
 }
 
@@ -330,12 +337,13 @@ void init(){
 	//initialize the matrix
 	glLoadIdentity();
 
-	//give PERSPECTIVE parameters
+	// give PERSPECTIVE parameters
+    //      - field of view in the Y (vertically)
+	//      - aspect ratio = field x / field y
+	//      - near distance
+	//      - far distance
 	gluPerspective(80,	1,	1,	1000.0);
-	//field of view in the Y (vertically)
-	//aspect ratio that determines the field of view in the X direction (horizontally)
-	//near distance
-	//far distance
+
 }
 
 int main(int argc, char **argv){

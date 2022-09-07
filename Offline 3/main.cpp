@@ -6,8 +6,8 @@
 
 
 
-#include "1705004_classes.hpp"
-#include "1705004_bitmap_image.hpp"
+#include "classes.hpp"
+#include "bitmap_image.hpp"
 
 
 double cameraHeight;
@@ -37,7 +37,7 @@ extern vector<SpotLight *> spotLights;
 
 void loadData(){
 
-    ifstream scene("test_scene.txt");
+    ifstream scene("scene.txt");
 
     int totalObjects;
 
@@ -159,9 +159,11 @@ void loadData(){
         tempObject = new Floor(1000.0, 20.0);
         
         // set coefficients and shine randomly
-        tempObject->setCoefficients(0.3, 0.3, 0.3, 0.3);
-        tempObject->setShine(2);
-        
+        tempObject->setCoefficients(0.4, 0.2, 0.2, 0.2);
+        tempObject->setShine(10);
+        // tempObject->setCoefficients(0.1, 0.8, 0.5, 0.1);
+        // tempObject->setShine(10);
+
         // push the floor in objects list
         objects.push_back(tempObject);
 
@@ -200,9 +202,9 @@ void capture()
 
     cout << "Output_1" << captures <<  ".bmp" << endl;
     // capture objects for each pixel
-    for(int j=0;j<pixelWidth;j++)
+    for(int j=0;j<pixelHeight;j++)
     {
-        for(int i=0;i<pixelHeight;i++)
+        for(int i=0;i<pixelWidth;i++)
         {
             Vector3D currentPixel;
             currentPixel = topLeft + r.multiply(du * j) - u.multiply(dv * i);

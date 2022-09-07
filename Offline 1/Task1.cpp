@@ -14,7 +14,7 @@ double angle;
 
 const double CUBE_LENTH = 20.0;
 const double SPHERE_RADIUS = 10.0;
-const double TOTAL_LENGTH = CUBE_LENTH + SPHERE_RADIUS;
+const double TOTAL_LENGTH = CUBE_LENTH + SPHERE_RADIUS;     // maximum size of any shape
 
 double cube_length;
 double sphere_radius;
@@ -49,27 +49,37 @@ void drawAxes()
 {
 	if(drawaxes==1)
 	{
-		glColor3f(1.0, 1.0, 1.0);
+		
 		glBegin(GL_LINES);{
+
+            // x axis : red
+            glColor3f(1.0, 0.0, 0.0);
 			glVertex3f( 100,0,0);
 			glVertex3f(-100,0,0);
 
+            // y axis : green
+            glColor3f(0.0, 1.0, 0.0);
 			glVertex3f(0,-100,0);
 			glVertex3f(0, 100,0);
 
+            // z axis : blue
+            glColor3f(0.0, 0.0, 1.0);
 			glVertex3f(0,0, 100);
 			glVertex3f(0,0,-100);
-		}glEnd();
+		
+        }glEnd();
 	}
 }
+
 void drawGrid()
 {
-	int i;
-	if(drawgrid==1)
+	
+    if(drawgrid==1)
 	{
 		glColor3f(0.6, 0.6, 0.6);	//grey
 		glBegin(GL_LINES);{
-			for(i=-8;i<=8;i++){
+			
+            for(int i=-8;i<=8;i++){
 
 				if(i==0)
 					continue;	//SKIP the MAIN axes
@@ -82,13 +92,14 @@ void drawGrid()
 				glVertex3f(-90, i*10, 0);
 				glVertex3f( 90, i*10, 0);
 			}
+
 		}glEnd();
 	}
 }
 
 void drawSquare(double a)
 {
-
+    // draws a square on the xy plane with (0,0,0) at center
 	glBegin(GL_QUADS);{
         glVertex3f( a,a,0);
 		glVertex3f( a,-a,0);
@@ -99,20 +110,23 @@ void drawSquare(double a)
 
 void drawCyllinder(double radius, double height, int segments, int fraction=1)
 {
-    int i;
+
+    //  parameters:
+    //      - segments : number of rectangles that makes up the surface of the cyllinder 
+    //      - fraction : fraction of the full (360 degree) radius of the cyllinder to draw
+
     struct point points[100];
 
-    //generate points
-    for(i=0;i<=segments;i++)
+    // generate points
+    for(int i=0;i<=segments;i++)
     {
         points[i].x=radius*cos(((double)i/(double)segments)*2*pi/fraction);
         points[i].y=radius*sin(((double)i/(double)segments)*2*pi/fraction);
     }
 
-    //draw triangles using generated points
-    for(i=0;i<segments;i++)
+    // draw quads using generated points
+    for(int i=0;i<segments;i++)
     {
-
         glBegin(GL_QUADS);
         {
             glVertex3f(points[i+1].x,points[i+1].y,height);
@@ -123,18 +137,26 @@ void drawCyllinder(double radius, double height, int segments, int fraction=1)
         glEnd();
     }
 }
+
+
 void drawHalfSphere(double radius,int slices,int stacks, int fraction=1)
 {
-    struct point points[100][100];
-	int i,j;
-	double h,r;
+    //  draws the upper half of a sphere
+    //  parameters:
+    //      - slices : number of segments that makes up one 2D circle 
+    //      - stacks : number of 2D circles used to make the 3D sphere
+    //      - fraction : fraction of the half sphere to draw
 
+    struct point points[100][100];
+	
 	//generate points
-	for(i=0;i<=stacks;i++)
+	for(int i=0;i<=stacks;i++)
 	{
-		h=radius*sin(((double)i/(double)stacks)*(pi/2));
-		r=radius*cos(((double)i/(double)stacks)*(pi/2));
-		for(j=0;j<=slices;j++)
+        // radius and height of the 2D circle
+		double h=radius*sin(((double)i/(double)stacks)*(2.0 * pi));
+		double r=radius*cos(((double)i/(double)stacks)*(2.0 * pi));
+
+		for(int j=0;j<=slices;j++)
 		{
 			points[i][j].x=r*cos(((double)j/(double)slices)*2*pi/fraction);
 			points[i][j].y=r*sin(((double)j/(double)slices)*2*pi/fraction);
@@ -143,9 +165,9 @@ void drawHalfSphere(double radius,int slices,int stacks, int fraction=1)
 	}
 
 	//draw quads using generated points
-	for(i=0;i<stacks;i++)
+	for(int i=0;i<stacks;i++)
 	{
-        for(j=0;j<slices;j++)
+        for(int j=0;j<slices;j++)
 		{
 			glBegin(GL_QUADS);{
 			    glVertex3f(points[i][j].x,points[i][j].y,points[i][j].z);
@@ -158,12 +180,14 @@ void drawHalfSphere(double radius,int slices,int stacks, int fraction=1)
 	}
 }
 
-void drawSphereFrame(double displacement, double radius)
+void drawSpheresFrame(double displacement, double radius)
 {
+    // draws 4 parts of a half sphere with space in between for the cube
+    // displacement : length of the cube
     glPushMatrix();
     {
         glTranslatef(displacement, displacement, displacement);
-        drawHalfSphere(radius,24,20, 4);
+        drawHalfSphere(radius,50,50, 4);
 
     }
     glPopMatrix();
@@ -171,21 +195,21 @@ void drawSphereFrame(double displacement, double radius)
     {
         glTranslatef(displacement, displacement, -displacement);
         glRotatef(90, 0, 1, 0);
-        drawHalfSphere(radius,24,20, 4);
+        drawHalfSphere(radius,50,50, 4);
     }
     glPopMatrix();
     glPushMatrix();
     {
         glTranslatef(-displacement, displacement, -displacement);
         glRotatef(180, 0, 1, 0);
-        drawHalfSphere(radius,24,20,4);
+        drawHalfSphere(radius,50,50,4);
     }
     glPopMatrix();
     glPushMatrix();
     {
         glTranslatef(-displacement, displacement, displacement);
         glRotatef(270, 0, 1, 0);
-        drawHalfSphere(radius,24,20,4);
+        drawHalfSphere(radius,50,50,4);
     }
 
     glPopMatrix();
@@ -193,10 +217,13 @@ void drawSphereFrame(double displacement, double radius)
 
 void drawCyllindersFrame(double displacement, double radius)
 {
+
+    // draw 4 parts of a cyllinder with space in between for the cube
+    // displacement : length of the cube
     glPushMatrix();
     {
         glTranslatef(displacement, displacement, -displacement);
-        drawCyllinder(radius, displacement * 2, 20, 4);
+        drawCyllinder(radius, displacement * 2, 50, 4);
     }
     glPopMatrix();
 
@@ -204,7 +231,7 @@ void drawCyllindersFrame(double displacement, double radius)
     {
         glTranslatef(-displacement, displacement, -displacement);
         glRotatef(90, 0, 1, 0);
-        drawCyllinder(radius, displacement * 2, 20, 4);
+        drawCyllinder(radius, displacement * 2, 50, 4);
     }
     glPopMatrix();
 
@@ -212,7 +239,7 @@ void drawCyllindersFrame(double displacement, double radius)
     {
         glTranslatef(-displacement, displacement, displacement);
         glRotatef(180, 0, 1, 0);
-        drawCyllinder(radius, displacement * 2, 20, 4);
+        drawCyllinder(radius, displacement * 2, 50, 4);
     }
     glPopMatrix();
 
@@ -220,7 +247,7 @@ void drawCyllindersFrame(double displacement, double radius)
     {
         glTranslatef(displacement, displacement, displacement);
         glRotatef(270, 0, 1, 0);
-        drawCyllinder(radius, displacement * 2, 20, 4);
+        drawCyllinder(radius, displacement * 2, 50, 4);
     }
     glPopMatrix();
 
@@ -233,18 +260,18 @@ void drawSS()
     {
         glColor3f(1.0,0.0,0.0);
 
-        // upper hemisphere
-        drawSphereFrame(cube_length, sphere_radius);
+        // upper halfsphere frame
+        drawSpheresFrame(cube_length, sphere_radius);
 
         glRotatef(180, 1, 0, 0);
 
-        // lower hemisphere
-        drawSphereFrame(cube_length, sphere_radius);
+        // lower halfsphere frame
+        drawSpheresFrame(cube_length, sphere_radius);
 
     }
     glPopMatrix();
 
-    // draw 6 full squares
+    // draw 6 full squares (sides of the cube)
     glPushMatrix();
     {
         glColor3f(1.0, 1.0, 1.0);
@@ -345,111 +372,117 @@ void keyboardListener(unsigned char key, int x,int y){
 
     switch(key){
 
-		case '1':
-            // u constant
+		case '1':   // rotate / look left (axis : u)
             
             l = l.multiply(cos(A)).add(u.cross(l).multiply(sin(A)));
             r = r.multiply(cos(A)).add(u.cross(r).multiply(sin(A)));
-            
-            
             break;
 
-        case '2':
-            // u constant
+        case '2':   // rotate / look right (axis : u)
             
             l = l.multiply(cos(-A)).add(u.cross(l).multiply(sin(-A)));
             r = r.multiply(cos(-A)).add(u.cross(r).multiply(sin(-A)));
 
             break;
 
-        case '3':
-            // r constant
-            
+        case '3':   // look up (axis : r)
+
             u = u.multiply(cos(A)).add(r.cross(u).multiply(sin(A)));
             l = l.multiply(cos(A)).add(r.cross(l).multiply(sin(A)));
             break;
 
-        case '4':
-            // r constant
+        case '4':   // look down (axis : r)
             
             u = u.multiply(cos(-A)).add(r.cross(u).multiply(sin(-A)));
             l = l.multiply(cos(-A)).add(r.cross(l).multiply(sin(-A)));
             break;
 
 
-        case '5':
-            // l constant
+        case '5':   // tilt clockwise (axis : l)
             
             r = r.multiply(cos(A)).add(l.cross(r).multiply(sin(A)));
             u = u.multiply(cos(A)).add(l.cross(u).multiply(sin(A)));
-
             break;
-        case '6':
-            // l constant
+
+        case '6':   // tilt counterclockwise (axis : l)
             
             r = r.multiply(cos(-A)).add(l.cross(r).multiply(sin(-A)));
             u = u.multiply(cos(-A)).add(l.cross(u).multiply(sin(-A)));
-
             break;
+
 		default:
 			break;
 	}
 }
-
 
 void specialKeyListener(int key, int x,int y){
-	switch(key){
-		case GLUT_KEY_DOWN:
-            pos = pos.add(l.multiply(-2));
-			break;
-		case GLUT_KEY_UP:
-            pos = pos.add(l.multiply(2));
+
+    double delta = 2.0;
+	
+    switch(key){
+
+		case GLUT_KEY_UP:           // move forward
+            pos = pos.add(l.multiply(delta));
 			break;
 
-		case GLUT_KEY_RIGHT:
-			pos = pos.add(r.multiply(2));
+        case GLUT_KEY_DOWN:         // move backward
+            pos = pos.add(l.multiply(-delta));
 			break;
-		case GLUT_KEY_LEFT:
-            pos = pos.add(r.multiply(-2));
+		
+		case GLUT_KEY_RIGHT:        // move right
+			pos = pos.add(r.multiply(delta));
+			break;
+		
+        case GLUT_KEY_LEFT:         // move left
+            pos = pos.add(r.multiply(-delta));
 			break;
 
-		case GLUT_KEY_PAGE_UP:
-            pos = pos.add(u.multiply(2));
+		case GLUT_KEY_PAGE_UP:      // move up
+            pos = pos.add(u.multiply(delta));
 			break;
-		case GLUT_KEY_PAGE_DOWN:
-            pos = pos.add(u.multiply(-2));
+
+		case GLUT_KEY_PAGE_DOWN:    // move down
+            pos = pos.add(u.multiply(-delta));
             break;
 
-		case GLUT_KEY_INSERT:
+		case GLUT_KEY_HOME:         // cube to sphere
+
+            // increase the sphere radius and decrease cube length
+            sphere_radius = std::min(TOTAL_LENGTH, sphere_radius + delta);
+            cube_length = std::max(0.0, cube_length - delta);
+			break;
+		case GLUT_KEY_END:          // sphere to cube
+
+            // increase the cube length and decrease sphere radius
+            cube_length = std::min(TOTAL_LENGTH, cube_length + delta);
+            sphere_radius = std::max(0.0, sphere_radius - delta);
+			break;
+        
+        case GLUT_KEY_INSERT:
 			break;
 
-		case GLUT_KEY_HOME:
-            sphere_radius = std::min(TOTAL_LENGTH, sphere_radius + 2.0);
-            cube_length = std::max(0.0, cube_length - 2.0);
-			break;
-		case GLUT_KEY_END:
-            cube_length = std::min(TOTAL_LENGTH, cube_length + 2.0);
-            sphere_radius = std::max(0.0, sphere_radius - 2.0);
-			break;
 		default:
 			break;
 	}
+
 }
 
-void mouseListener(int button, int state, int x, int y){	//x, y is the x-y of the screen (2D)
-	switch(button){
+void mouseListener(int button, int state, int x, int y){	
+    // x, y is the x-y of the screen (2D)
+	
+    switch(button){
 		case GLUT_LEFT_BUTTON:
-			if(state == GLUT_DOWN){		// 2 times?? in ONE click? -- solution is checking DOWN or UP
+			
+            // show or hide axes
+            if(state == GLUT_DOWN){	
 				drawaxes=1-drawaxes;
 			}
 			break;
 
 		case GLUT_RIGHT_BUTTON:
-			//........
 			break;
 
 		case GLUT_MIDDLE_BUTTON:
-			//........
 			break;
 
 		default:
@@ -467,30 +500,24 @@ void display(){
 	/********************
 	/ set-up camera here
 	********************/
-	//load the correct matrix -- MODEL-VIEW matrix
+	//  load the correct matrix -- MODEL-VIEW matrix
 	glMatrixMode(GL_MODELVIEW);
 
 	//initialize the matrix
 	glLoadIdentity();
 
-	//now give three info
-	//1. where is the camera (viewer)?
-	//2. where is the camera looking?
-	//3. Which direction is the camera's UP direction?
+	//  gluLookAt parameters:
+	//      - where is the camera (viewer)?
+	//      - where is the camera looking?
+	//      - which direction is the camera's UP direction?
     gluLookAt(pos.x, pos.y, pos.z, pos.x+l.x, pos.y+l.y, pos.z+l.z, u.x, u.y, u.z);
 
 	//again select MODEL-VIEW
 	glMatrixMode(GL_MODELVIEW);
 
-
-	/****************************
-	/ Add your objects from here
-	****************************/
-	//add objects
-
+	// add objects to draw
 	drawAxes();
 	drawGrid();
-
     drawSS();
 
 	//ADD this line in the end --- if you use double buffer (i.e. GL_DOUBLE)
@@ -499,12 +526,12 @@ void display(){
 
 void animate(){
 	angle+=0.05;
-	//codes for any changes in Models, Camera
 	glutPostRedisplay();
 }
 
 void init(){
-	//codes for initialization
+	
+    //codes for initialization
 
 	drawgrid=0;
 	drawaxes=1;
@@ -512,14 +539,15 @@ void init(){
 	sphere_radius = SPHERE_RADIUS;
 	cube_length = CUBE_LENTH;
 
-	// initialize pos of camera and directions
+	// initialize positions and direction vectors for the camera
 
 	pos = point(100.0, 100.0, 0.0);
 	u = point(0.0, 0.0, 1.0);
 	r = point(-1.0/sq2, 1.0/sq2, 0.0);
 	l = point(-1.0/sq2, -1.0/sq2, 0.0);
 
-	//clear the screen
+	
+    //clear the screen
 	glClearColor(0,0,0,0);
 
 	/************************
@@ -531,12 +559,13 @@ void init(){
 	//initialize the matrix
 	glLoadIdentity();
 
-	//give PERSPECTIVE parameters
+	// give PERSPECTIVE parameters
+    //      - field of view in the Y (vertically)
+	//      - aspect ratio = field x / field y
+	//      - near distance
+	//      - far distance
 	gluPerspective(80,	1,	1,	1000.0);
-	//field of view in the Y (vertically)
-	//aspect ratio that determines the field of view in the X direction (horizontally) : aspect ratio = field x / field y
-	//near distance
-	//far distance
+	
 }
 
 int main(int argc, char **argv){

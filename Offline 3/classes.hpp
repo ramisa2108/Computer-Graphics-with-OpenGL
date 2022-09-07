@@ -251,14 +251,14 @@ public:
         this->pointLight = pointLight;
         this->lightDirection = lightDirection;
         this->cutoffAngle = cutoffAngle;
-        this->lightDirection.normalize();
     }
     bool exceedsCutoff(Ray &ray)
-    {   
-        double dot = (this->lightDirection.dot(ray.dir));
+    {
+        double dot = this->lightDirection.dot(ray.dir);
+        dot /= sqrt(this->lightDirection.square() * ray.dir.square()); 
         double theta = acos(abs(dot));
-        
-        return (theta - (this->cutoffAngle * pi / 180.0) > eps);
+
+        return (theta > (this->cutoffAngle * pi / 180.0));
     }
     void draw()
     {
@@ -381,7 +381,7 @@ void Object::getColorByPhongsModel(double tCurrent, Ray &ray, Color &finalColor,
 
         finalColor = finalColor + pl->color * this->coEfficients[DIFF] * max(lambertValue, 0.0) * intersectionColor;
         finalColor.fixRange();
-        finalColor = finalColor + pl->color * this->coEfficients[SPEC] * max(phongValue, 0.0);
+        finalColor = finalColor + pl->color * this->coEfficients[SPEC] * max(phongValue, 0.0) ;
         finalColor.fixRange();
     }
 
@@ -419,7 +419,7 @@ void Object::getColorByPhongsModel(double tCurrent, Ray &ray, Color &finalColor,
 
         finalColor = finalColor + spl->pointLight.color * this->coEfficients[DIFF] * max(lambertValue, 0.0) * intersectionColor;
         finalColor.fixRange();
-        finalColor = finalColor + spl->pointLight.color * this->coEfficients[SPEC] * max(phongValue, 0.0);
+        finalColor = finalColor + spl->pointLight.color * this->coEfficients[SPEC] * max(phongValue, 0.0) ;
         finalColor.fixRange();
     }
     return ;

@@ -14,7 +14,6 @@ using namespace std;
 #define inf 1e18
 #define eps 1e-8
 
-
 class Vector{
 
 public:
@@ -99,12 +98,8 @@ public:
     {
         pair<Vector, Vector>intersections;
 
-	// intersections.first ==> left intersecting point (min x)
-	// intersection.second ==> right intersecting point (max x)
-
-        intersections.first = Vector(inf, y, inf);
-        intersections.second = Vector(-inf, y, -inf);
-
+        intersections.first = Vector(inf, y, inf);      // left intersecting point (min x)
+        intersections.second = Vector(-inf, y, -inf);   // right intersecting point (max x)
 
         for(int i=0;i<3;i++)
         {
@@ -160,8 +155,6 @@ public:
         for(int i=0;i<3;i++) points[i].print();
         cout << "colors: " << colors[0] << ' ' << colors[1] << ' ' << colors[2] << endl;
     }
-
-
 
 };
 
@@ -283,7 +276,7 @@ public:
         if(cols != m.rows)
         {
             cout << "Matrix dimensions don't match for multiplication (" << rows << ", " << cols << ") and (" << m.rows << ", " << m.cols << ")" << endl;
-            return NULL;
+            return Matrix();
         }
 
         Matrix result(rows, m.cols);
@@ -363,6 +356,7 @@ public:
     }
 
 };
+
 
 
 StackElement *top = new StackElement();
@@ -596,9 +590,6 @@ int main()
         cout << "Can't read stage3.txt" << endl;
         return 0;
     }
-
-
-
 
 
     if(config.is_open())

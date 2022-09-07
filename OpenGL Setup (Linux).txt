@@ -1,0 +1,13 @@
+Install OpenGL on linux 
+==> 
+https://askubuntu.com/questions/96087/how-to-install-opengl-glut-libraries
+
+Set up codeblocks project:
+==> 
+https://dev.to/didiksupriadi41/set-up-opengl-utility-toolkit-glut-and-codeblocks-on-linux-la3
+** Instead of glut project choose free-glut project while creating project
+
+Set up in VS Code:
+==>
+No extra setup
+compile with linkers: -lglut -lGLU -lGL

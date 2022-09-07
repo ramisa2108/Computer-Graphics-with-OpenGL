@@ -1,6 +1,6 @@
 # run with cpp file name as argument
 
-g++ $1 -o main -lglut -lGLU -lGL
+g++ $1 -o main
 
 if [ $? -eq 0 ]; then
     ./main
@@ -8,5 +8,3 @@ if [ $? -eq 0 ]; then
 fi
 
 exit 1
-
-
