@@ -9,9 +9,9 @@ Sessional work of Computer Graphics course.
 * **Offline 1 & Online 1**
   - Drawing basic shapes using OpenGL library
  <p align="center">
-<img src="https://github.com/ramisa2108/CSE-410-Computer-Graphics-Sessional/blob/main/Offline%201/Sample_%20Outpit_1_1.png" width="400" height="300"/>
+<img src="https://github.com/ramisa2108/CSE-410-Computer-Graphics-Sessional/blob/main/Offline%201/Sample_Output_1.png" width="400" height="300"/>
 <img src="https://img.freepik.com/free-vector/two-way-black-arrow-art-illustration_56104-735.jpg?w=2000" width="100" height="300"/>
-<img src="https://github.com/ramisa2108/CSE-410-Computer-Graphics-Sessional/blob/main/Offline%201/Sample_Output_1_2.png" width="400" height="300" />
+<img src="https://github.com/ramisa2108/CSE-410-Computer-Graphics-Sessional/blob/main/Offline%201/Sample_Output_2.png" width="400" height="300" />
 </p>
 
 * **Offline 2**
