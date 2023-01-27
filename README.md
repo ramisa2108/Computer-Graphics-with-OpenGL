@@ -18,5 +18,6 @@ Sessional work of Computer Graphics course.
   - C++ implementation of ray tracing.
   - OpenGL drawing and bitmap image generation.
   - Phong model used for illumination and shading.
-
-
+<p align="center">
+<img src="https://github.com/ramisa2108/CSE-410-Computer-Graphics-Sessional/blob/main/Offline%203/Sample_Output.bmp" width="500" height="500"/>
+</p>
