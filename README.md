@@ -6,7 +6,7 @@ Sessional work of Computer Graphics course.
 
 ### Description
 
-* **Offline 1 & Online 1**
+* **Shape Generation with OpenGL**
   - Drawing basic shapes using OpenGL library
  <p align="center">
 <img src="https://github.com/ramisa2108/CSE-410-Computer-Graphics-Sessional/blob/main/Offline%201/Sample_Output_1.png" width="250" height="300"/>
@@ -14,7 +14,7 @@ Sessional work of Computer Graphics course.
 <img src="https://github.com/ramisa2108/CSE-410-Computer-Graphics-Sessional/blob/main/Offline%201/Sample_Output_2.png" width="250" height="300" />
 </p>
 
-* **Offline 2**
+* **Raster-based Graphics Pipeline**
   - C++ implementation of the openGL functions. Bitmap images generated.
   - Transformations: Modeling, View, Projection Transformation.
   - Hidden Surface Removal : Z-Buffer Algorithm.
@@ -22,7 +22,7 @@ Sessional work of Computer Graphics course.
 <img src="https://github.com/ramisa2108/CSE-410-Computer-Graphics-Sessional/blob/main/Offline%202/Sample_Output.bmp" width="400" height="400" />
 </p>
  
-* **Offline 3**
+* **Ray Tracing**
   - C++ implementation of ray tracing.
   - OpenGL drawing and bitmap image generation.
   - Phong model used for illumination and shading.
