@@ -1,4 +1,4 @@
-# CSE-410-Computer-Graphics-Sessional
+# Computer Graphics with OpenGL
 
 Sessional work of Computer Graphics course.
 
